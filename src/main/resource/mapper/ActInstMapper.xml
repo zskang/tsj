@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.promore.bf.mydao.ActInstDao">
+	<resultMap type="ActInst" id="ActInstResult">
+		<result property="id_" column="id_" />
+		<result property="proc_def_id_" column="proc_def_id_" />
+		<result property="proc_inst_id_" column="proc_inst_id_" />
+		<result property="execution_id_" column="execution_id_" />
+		<result property="act_id_" column="act_id_" />
+		<result property="task_id_" column="task_id_" />
+		<result property="act_name_" column="act_name_" />
+		<result property="act_type_" column="act_type_" />
+		<result property="assignee_" column="assignee_" />
+		<result property="assingneeName_" column="assingneeName_" />
+		<result property="start_time_" column="start_time_" />
+		<result property="end_time_" column="end_time_" />
+	</resultMap>
+
+
+	<resultMap type="ActRuTask" id="ActRuTaskResult">
+		<result property="id_" column="id_" />
+		<result property="execution_id_" column="execution_id_" />
+		<result property="proc_inst_id_" column="proc_inst_id_" />
+		<result property="proc_def_id_" column="proc_def_id_" />
+		<result property="task_def_key_" column="task_def_key_" />
+		<result property="create_time_" column="create_time_" />
+		<result property="form_key_" column="form_key_" />
+		<result property="title" column="title" />
+	</resultMap>
+
+	<resultMap type="DeployEntity" id="DeployEntityResult">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="moduleName" column="moduleName" />
+		<result property="moduleid" column="moduleid" />
+		<result property="deploymentTime" column="deploymentTime" />
+	</resultMap>
+
+	<select id="queryInfoBy" parameterType="Map" resultMap="DeployEntityResult">
+		SELECT
+		dep.ID_ id,
+		dep.NAME_ name,
+		sm. NAME moduleName,
+		dep.DEPLOY_TIME_ deploymentTime
+		FROM
+		act_re_deployment dep
+		LEFT JOIN act_re_procdef def ON dep.ID_ = def.DEPLOYMENT_ID_
+		LEFT JOIN sys_act_module sam ON sam.developKey = def.KEY_
+		LEFT JOIN sys_module sm ON sm.id = sam.moduleId
+		WHERE
+		dep.ID_ = #{id}
+		and dep.NAME_ is not null
+	</select>
+
+	<select id="queryObjectByProcessInstanceId" parameterType="Map"
+		resultMap="ActRuTaskResult">
+		select act.* from act_ru_task act where
+		act.proc_inst_id_=#{processInstanceId} limit 1
+	</select>
+
+
+	<select id="queryObjByTaskId" parameterType="Map" resultMap="ActInstResult">
+		select act.*,u.chinesename assingneeName_ from act_hi_actinst act left
+		join sys_user u on act.assignee_=u.id where task_id_=#{taskId}
+	</select>
+
+</mapper>

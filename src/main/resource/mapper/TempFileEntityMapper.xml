@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.promore.bf.mydao.TempFileEntityDao">
+
+	<resultMap type="TempFileEntity" id="TempFileEntityResult">
+		<result property="id" column="id" />
+		<result property="projectId" column="projectId" />
+		<result property="moduleId" column="moduleId" />
+		<result property="fileName" column="fileName" />
+		<result property="filePath" column="filePath" />
+		<result property="srcFilePath" column="srcFilePath" />
+		<result property="createTime" column="createTime" />
+		<result property="lstUpdateTime" column="lstUpdateTime" />
+		<result property="createMan" column="createMan" />
+		<result property="lstUpdateMan" column="lstUpdateMan" />
+		<result property="ywid" column="ywid" />
+		<result property="state" column="state" />
+		<result property="wfKey" column="wfKey" />
+	</resultMap>
+
+
+	<insert id="saveEntity" parameterType="TempFileEntity"
+		useGeneratedKeys="true" keyProperty="id">
+
+		insert into
+
+		bus_temp_file_info(id,projectId,moduleId,fileName,
+
+		filePath,createTime,lstUpdateTime,createMan,lstUpdateMan,srcFilePath,ywid,wfKey,state)
+
+		values(null,#{projectId},#{moduleId},#{fileName},
+
+		#{filePath},#{createTime},#{lstUpdateTime},#{createMan},#{lstUpdateMan},#{srcFilePath},#{ywid},#{wfKey},#{state})
+
+	</insert>
+
+	<delete id="deleteEntity" parameterType="Map">
+		delete from
+		bus_temp_file_info where id=#{ID}
+	</delete>
+
+	<delete id="deleteEntityByFileName" parameterType="Map">
+		delete from
+		bus_temp_file_info where fileName=#{fileName}
+	</delete>
+
+	<select id="findById" parameterType="INTEGER" resultMap="TempFileEntityResult">
+		select *
+		from bus_temp_file_info where id=#{id,jdbcType=INTEGER}
+	</select>
+
+	<update id="updateEntitys" parameterType="Map">
+		update
+		bus_temp_file_info set lstUpdateMan=#{lstUpdateMan}
+		where
+		lstUpdateMan=#{createMan}
+		and
+		moduleId=#{moduleId}
+		and
+		projectId=#{projectId}
+
+	</update>
+
+
+	<update id="updateEntitys2" parameterType="Map">
+		update
+		bus_temp_file_info
+		set
+		state=#{newstate},
+		ywid=#{ywid}
+		<where>
+			<if test="moduleId!=null and moduleId!='' ">
+				and moduleId = #{moduleId}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+			<if test="state!=null and state!='' ">
+				and state = #{state}
+			</if>
+			<if test="createMan!=null and createMan!='' ">
+				and lstUpdateMan = #{createMan}
+			</if>
+		</where>
+	</update>
+	<update id="updateEntitysByYwid" parameterType="Map">
+		update
+		bus_temp_file_info
+		set state= #{state},
+		ywid = #{ywid}
+		<where>
+			<if test="oldywid!=null and oldywid!='' ">
+				and ywid = #{oldywid}
+			</if>
+
+			<if test="oldestate!=null and oldestate!='' ">
+				and state = #{oldestate}
+			</if>
+			<if test="moduleId!=null and moduleId!='' ">
+				and moduleId = #{moduleId}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+		</where>
+	</update>
+
+	<select id="queryListByMap2" parameterType="Map" resultType="Map">
+		select * from bus_temp_file_info
+		<where>
+			<if test="moduleId!=null and moduleId!='' ">
+				and moduleId = #{moduleId}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+			<if test="lstUpdateMan!=null and lstUpdateMan!='' ">
+				and lstUpdateMan = #{lstUpdateMan}
+			</if>
+			<if test="ywid!=null and ywid!='' ">
+				and ywid = #{ywid}
+			</if>
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+			<if test="state!=null and state!='' ">
+				and state = #{state}
+			</if>
+		</where>
+	</select>
+	<select id="queryListByMap" parameterType="Map" resultMap="TempFileEntityResult">
+		select * from bus_temp_file_info
+		<where>
+			<if test="moduleId!=null and moduleId!='' ">
+				and moduleId = #{moduleId}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+			<if test="lstUpdateMan!=null and lstUpdateMan!='' ">
+				and lstUpdateMan = #{lstUpdateMan}
+			</if>
+			<if test="ywid!=null and ywid!='' ">
+				and ywid = #{ywid}
+			</if>
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+			<if test="state!=null and state!='' ">
+				and state = #{state}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryCountByMap" parameterType="Map" resultType="int">
+		select count(1) from
+		bus_temp_file_info
+		<where>
+			<if test="moduleId!=null and moduleId!='' ">
+				and moduleId = #{moduleId}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+			<if test="lstUpdateMan!=null and lstUpdateMan!='' ">
+				and lstUpdateMan = #{lstUpdateMan}
+			</if>
+			<if test="ywid!=null and ywid!='' ">
+				and ywid = #{ywid}
+			</if>
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+			<if test="fileName!=null and fileName!='' ">
+				and fileName = #{fileName}
+			</if>
+			<if test="state!=null and state!='' ">
+				and state = #{state}
+			</if>
+		</where>
+	</select>
+
+	<delete id="removeAllAttachFiles" parameterType="Map">
+		delete from
+		bus_temp_file_info
+		<where>
+			<if test="moduleId!=null and moduleId!='' ">
+				and moduleId = #{moduleId}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+			<if test="lstUpdateMan!=null and lstUpdateMan!='' ">
+				and lstUpdateMan = #{lstUpdateMan}
+			</if>
+			<if test="ywid!=null and ywid!='' ">
+				and ywid = #{ywid}
+			</if>
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+			<if test="state!=null and state!='' ">
+				and state = #{state}
+			</if>
+		</where>
+	</delete>
+
+</mapper>

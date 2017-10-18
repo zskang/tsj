@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="aqjsjd_36_check" name="aqjsjd_36_check" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="xcjcjl" name="形成检查记录" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-edit.jsp?sfEdit=Y&amp;sfUpload=Y&amp;wfName=安全技术工作任务流程&amp;nextMan=techofficor&amp;doName=形成检查记录&amp;isChild=Y&amp;sfTz=Y&amp;nodes=4"></userTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="xcjcjl"></sequenceFlow>
+    <userTask id="jcjltb" name="检查记录通报" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=17&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=techofficor&amp;doName=检查记录通报&amp;fName=安全技术工作任务流程&amp;nextName=整改验证&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=N&amp;sfUpload=Y&amp;isChild=Y"></userTask>
+    <sequenceFlow id="tjjc" name="提交检查" sourceRef="xcjcjl" targetRef="jcjltb"></sequenceFlow>
+    <userTask id="zgyz" name="整改验证" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=4&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=documenter&amp;doName=整改验证&amp;wfName=安全技术工作任务流程&amp;nextName=检查及整改记录归卷&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=Y&amp;sfUpload=Y&amp;isChild=Y"></userTask>
+    <sequenceFlow id="tjyz" name="提交验证" sourceRef="jcjltb" targetRef="zgyz"></sequenceFlow>
+    <userTask id="jcgzjlgj" name="归卷" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=99&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=NULL&amp;doName=检查及整改记录归卷&amp;wfName=安全技术工作任务流程&amp;nextName=NULL&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=Y&amp;sfUpload=N&amp;isChild=Y"></userTask>
+    <sequenceFlow id="tjgj" name="提交检查归卷" sourceRef="zgyz" targetRef="jcgzjlgj"></sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="gjuan" name="归卷" sourceRef="jcgzjlgj" targetRef="endevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_aqjsjd_36_check">
+    <bpmndi:BPMNPlane bpmnElement="aqjsjd_36_check" id="BPMNPlane_aqjsjd_36_check">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="239.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="xcjcjl" id="BPMNShape_xcjcjl">
+        <omgdc:Bounds height="55.0" width="105.0" x="379.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="jcjltb" id="BPMNShape_jcjltb">
+        <omgdc:Bounds height="55.0" width="105.0" x="580.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="zgyz" id="BPMNShape_zgyz">
+        <omgdc:Bounds height="55.0" width="105.0" x="800.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="jcgzjlgj" id="BPMNShape_jcgzjlgj">
+        <omgdc:Bounds height="55.0" width="127.0" x="1013.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="1209.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="274.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="379.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="tjjc" id="BPMNEdge_tjjc">
+        <omgdi:waypoint x="484.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="287.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="16.0" width="44.0" x="484.0" y="287.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="tjyz" id="BPMNEdge_tjyz">
+        <omgdi:waypoint x="685.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="800.0" y="287.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="16.0" width="44.0" x="685.0" y="287.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="tjgj" id="BPMNEdge_tjgj">
+        <omgdi:waypoint x="905.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1013.0" y="287.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="16.0" width="66.0" x="905.0" y="287.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="gjuan" id="BPMNEdge_gjuan">
+        <omgdi:waypoint x="1140.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1209.0" y="287.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="16.0" width="22.0" x="1140.0" y="287.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

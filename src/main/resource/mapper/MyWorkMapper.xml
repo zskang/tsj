@@ -1,0 +1,1086 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.promore.bf.mydao.MyTaskDao">
+
+	<resultMap type="ActRuTask" id="ActRuTaskResult">
+		<result property="id_" column="ID_" />
+		<result property="execution_id_" column="EXECUTION_ID_" />
+		<result property="proc_inst_id_" column="PROC_INST_ID_" />
+		<result property="proc_def_id_" column="PROC_DEF_ID_" />
+		<result property="task_def_key_" column="TASK_DEF_KEY_" />
+		<result property="assignee_" column="ASSIGNEE_" />
+		<result property="create_time_" column="CREATE_TIME_" />
+		<result property="start_time_" column="START_TIME_" />
+		<result property="end_time_" column="END_TIME_" />
+		<result property="due_date_" column="DUE_DATE_" />
+		<result property="form_key_" column="FORM_KEY_" />
+		<result property="title" column="TITLE" />
+		<result property="name" column="NAME_" />
+		<result property="chinesename" column="chinesename" />
+		<result property="state" column="state" />
+	</resultMap>
+
+	<select id="findMyTasks" parameterType="Map" resultType="INTEGER">
+		 <![CDATA[	
+		 select count(1)
+		     FROM (
+				 select DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_,
+						res.CREATE_TIME_,
+						res.FORM_KEY_,
+						info.YWNAME, 
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+						FROM
+						ACT_RU_TASK res
+						inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+					info.processInstanceId and res.ASSIGNEE_ = info.taskExcuter
+		]]>
+		<where>
+			<if test="wfStatus!=null and wfStatus!='' ">
+			 <![CDATA[ 	and  info.state = #{wfStatus}  ]]>
+			</if>
+
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="searchType!=null and searchType!='' and searchType=='normal'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) <= res.DUE_DATE_  ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='due'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) > res.DUE_DATE_ and res.DUE_DATE_>now()    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='overtime'">
+			 <![CDATA[ 	now() >= res.DUE_DATE_  ]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and info.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and info.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT   DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_,
+						res.CREATE_TIME_,
+						res.FORM_KEY_,
+						info.YWNAME, 
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+				FROM
+				ACT_RU_TASK res
+				inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+				info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+		]]>
+		<where>
+			<if test="wfStatus!=null and wfStatus!='' ">
+			 <![CDATA[ 	and  info.state = #{wfStatus}  ]]>
+			</if>
+
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="searchType!=null and searchType!='' and searchType=='normal'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) <= res.DUE_DATE_    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='due'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) > res.DUE_DATE_ and res.DUE_DATE_>now()    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='overtime'">
+			 <![CDATA[ 	now() >= res.DUE_DATE_   ]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		) t
+	</select>
+
+
+	<update id="updateHisTaskExcuters" parameterType="Map">
+		update act_hi_taskinst
+		<set>
+			<if test="bjjr!=null and bjjr!='' ">
+				ASSIGNEE_=#{bjjr}
+			</if>
+		</set>
+		where ASSIGNEE_=#{userid,jdbcType=INTEGER}
+		and PROC_INST_ID_ in (select
+		t.processInstanceId from bus_base_info t
+		where t.projectId=#{projectId}
+		)
+
+	</update>
+	<update id="updateTaskExcuters" parameterType="Map">
+		update ACT_RU_TASK
+		<set>
+			<if test="bjjr!=null and bjjr!='' ">
+				ASSIGNEE_=#{bjjr}
+			</if>
+		</set>
+		where ASSIGNEE_=#{userid,jdbcType=INTEGER}
+		and PROC_INST_ID_ in (select
+		t.processInstanceId from bus_base_info t where
+		t.projectId=#{projectId} )
+
+	</update>
+
+	<select id="getMyTaskList" parameterType="Map" resultMap="ActRuTaskResult">
+		select tt.ID_,
+		tt.EXECUTION_ID_,
+		tt.PROC_INST_ID_,
+		tt.PROC_DEF_ID_,
+		tt.TASK_DEF_KEY_,
+		tt.ASSIGNEE_,
+		tt.CREATE_TIME_,
+		tt.FORM_KEY_,
+		tt.NAME_,
+		tt.TITLE,
+		tt.STATE from (
+		 <![CDATA[
+	 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_,
+		res.CREATE_TIME_,
+		res.FORM_KEY_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE,
+		info.state
+		FROM
+		ACT_RU_TASK res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId and res.ASSIGNEE_ = info.taskExcuter
+		]]>
+		<where>
+			<if test="wfStatus!=null and wfStatus!='' ">
+			 <![CDATA[ 	and  info.state = #{wfStatus}  ]]>
+			</if>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='normal'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) <= res.DUE_DATE_    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='due'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) > res.DUE_DATE_ and res.DUE_DATE_>now()    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='overtime'">
+			 <![CDATA[ 	now() >= res.DUE_DATE_   ]]>
+			</if>
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_,
+		res.CREATE_TIME_,
+		res.FORM_KEY_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE,
+		info.state
+		FROM
+		ACT_RU_TASK res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+		]]>
+		<where>
+			<if test="wfStatus!=null and wfStatus!='' ">
+			 <![CDATA[ 	and  info.state = #{wfStatus}  ]]>
+			</if>
+
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="searchType!=null and searchType!='' and searchType=='normal'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) <= res.DUE_DATE_    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='due'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) > res.DUE_DATE_ and res.DUE_DATE_>now()    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='overtime'">
+			 <![CDATA[ 	now() >= res.DUE_DATE_   ]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		) tt where 1=1
+		order by tt.CREATE_TIME_ desc
+		<if test="pageIndex!=null and pageSize!=null">
+				 <![CDATA[ limit #{pageIndex},#{pageSize}]]>
+		</if>
+	</select>
+
+	<select id="findMyTasksPress" parameterType="Map" resultType="INTEGER">
+		 <![CDATA[	
+		 select count(1)
+		     FROM (
+				 select DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_,
+						res.CREATE_TIME_,
+						res.FORM_KEY_,
+						info.YWNAME, 
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+						FROM
+						ACT_RU_TASK res
+						inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+					info.processInstanceId and res.ASSIGNEE_ = info.taskExcuter
+		]]>
+		<where>
+			<if test="wfStatus!=null and wfStatus!='' ">
+			 <![CDATA[ 	and  info.state = #{wfStatus}  ]]>
+			</if>
+
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="searchType!=null and searchType!='' and searchType=='normal'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) <= res.DUE_DATE_  ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='due'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) > res.DUE_DATE_ and res.DUE_DATE_>now()    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='overtime'">
+			 <![CDATA[ 	now() >= res.DUE_DATE_  ]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and info.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and info.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="list!=null">
+				and res.ASSIGNEE_ in
+				<foreach collection="list" index="index" item="item" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT   DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_,
+						res.CREATE_TIME_,
+						res.FORM_KEY_,
+						info.YWNAME, 
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+				FROM
+				ACT_RU_TASK res
+				inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+				info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+		]]>
+		<where>
+			<if test="wfStatus!=null and wfStatus!='' ">
+			 <![CDATA[ 	and  info.state = #{wfStatus}  ]]>
+			</if>
+
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="searchType!=null and searchType!='' and searchType=='normal'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) <= res.DUE_DATE_    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='due'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) > res.DUE_DATE_ and res.DUE_DATE_>now()    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='overtime'">
+			 <![CDATA[ 	now() >= res.DUE_DATE_   ]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="list!=null">
+				and res.ASSIGNEE_ in
+				<foreach collection="list" index="index" item="item" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		) t
+	</select>
+
+	<select id="getMyTaskListPress" parameterType="Map" resultMap="ActRuTaskResult">
+		select tt.ID_,
+		tt.EXECUTION_ID_,
+		tt.PROC_INST_ID_,
+		tt.PROC_DEF_ID_,
+		tt.TASK_DEF_KEY_,
+		tt.ASSIGNEE_,
+		tt.CREATE_TIME_,
+		tt.DUE_DATE_,
+		tt.FORM_KEY_,
+		tt.NAME_,
+		tt.TITLE,
+		tt.chinesename from (
+		 <![CDATA[
+	 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_,
+		res.CREATE_TIME_,
+		res.DUE_DATE_,
+		res.FORM_KEY_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE,
+		user.chinesename
+		FROM
+		ACT_RU_TASK res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId and res.ASSIGNEE_ = info.taskExcuter
+		inner join sys_user user on user.id = res.ASSIGNEE_
+		]]>
+		<where>
+			<if test="wfStatus!=null and wfStatus!='' ">
+			 <![CDATA[ 	and  info.state = #{wfStatus}  ]]>
+			</if>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='normal'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) <= res.DUE_DATE_    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='due'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) > res.DUE_DATE_ and res.DUE_DATE_>now()    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='overtime'">
+			 <![CDATA[ 	now() >= res.DUE_DATE_   ]]>
+			</if>
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="list!=null">
+				and res.ASSIGNEE_ in
+				<foreach collection="list" index="index" item="item" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_,
+		res.CREATE_TIME_,
+		res.DUE_DATE_,
+		res.FORM_KEY_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE,
+		user.chinesename
+		FROM
+		ACT_RU_TASK res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+		inner join sys_user user on user.id = res.ASSIGNEE_
+		]]>
+		<where>
+			<if test="wfStatus!=null and wfStatus!='' ">
+			 <![CDATA[ 	and  info.state = #{wfStatus}  ]]>
+			</if>
+
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="searchType!=null and searchType!='' and searchType=='normal'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) <= res.DUE_DATE_    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='due'">
+			 <![CDATA[ 	date_add(NOW(), interval 12 hour) > res.DUE_DATE_ and res.DUE_DATE_>now()    ]]>
+			</if>
+			<if test="searchType!=null and searchType!='' and searchType=='overtime'">
+			 <![CDATA[ 	now() >= res.DUE_DATE_   ]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="list!=null">
+				and res.ASSIGNEE_ in
+				<foreach collection="list" index="index" item="item" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+
+		</where>
+		) tt where 1=1
+		order by tt.CREATE_TIME_ desc
+		<if test="pageIndex!=null and pageSize!=null">
+				 <![CDATA[ limit #{pageIndex},#{pageSize}]]>
+		</if>
+	</select>
+
+	<select id="findMyTasks4Faqi" parameterType="Map" resultType="INTEGER">
+		 <![CDATA[	
+		 select count(1)
+		     FROM (
+				 select DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_,
+						res.CREATE_TIME_,
+						res.FORM_KEY_,
+						info.YWNAME, 
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+						FROM
+						ACT_RU_TASK res
+						inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+					info.processInstanceId and res.ASSIGNEE_ = info.userid
+		]]>
+		<where>
+
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT   DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_,
+						res.CREATE_TIME_, 
+						res.FORM_KEY_,
+						info.YWNAME, 
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+				FROM
+				ACT_RU_TASK res
+				inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+				info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+		]]>
+		<where>
+
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		) t
+	</select>
+
+	<select id="findMyTasksList4Faqi" parameterType="Map"
+		resultMap="ActRuTaskResult">
+		select tt.ID_,
+		tt.EXECUTION_ID_,
+		tt.PROC_INST_ID_,
+		tt.PROC_DEF_ID_,
+		tt.TASK_DEF_KEY_,
+		tt.ASSIGNEE_,
+		tt.CREATE_TIME_,
+		tt.FORM_KEY_,
+		tt.NAME_,
+		tt.TITLE from (
+		 <![CDATA[
+	 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_, 
+		res.CREATE_TIME_, 
+		res.FORM_KEY_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+		FROM
+		ACT_RU_TASK res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId and res.ASSIGNEE_ = info.userid 
+		]]>
+		<where>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_, 
+		res.CREATE_TIME_, 
+		res.FORM_KEY_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+		FROM
+		ACT_RU_TASK res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+		]]>
+		<where>
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="startDate!=null and startDate!='' ">
+				 <![CDATA[  and res.CREATE_TIME_ >= #{startDate}   ]]>
+			</if>
+
+			<if test="endDate!=null and endDate!='' ">
+				 <![CDATA[   and res.CREATE_TIME_ <= #{endDate}   ]]>
+			</if>
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		) tt where 1=1
+		order by tt.CREATE_TIME_ desc
+		<if test="pageIndex!=null and pageSize!=null">
+				 <![CDATA[ limit #{pageIndex},#{pageSize}]]>
+		</if>
+	</select>
+
+
+	<select id="findMyTasks4Over" parameterType="Map" resultType="INTEGER">
+		 <![CDATA[	
+		 select count(1)
+		     FROM (
+				 select DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_,
+	   					res.START_TIME_,
+	    				res.END_TIME_,
+						res.FORM_KEY_,
+						info.YWNAME, 
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+						FROM
+						act_hi_taskinst res
+						inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+					info.processInstanceId  
+					and info.state='99'
+		]]>
+		<where>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT   DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_,
+	    				res.START_TIME_,
+	    				res.END_TIME_,
+						res.FORM_KEY_,
+						info.YWNAME, 
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+				FROM
+				act_hi_taskinst res
+				inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+				info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+				and info.state='99'
+		]]>
+		<where>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		) t
+	</select>
+
+	<select id="findMyTasksList4Over" parameterType="Map"
+		resultMap="ActRuTaskResult">
+		select tt.ID_,
+		tt.EXECUTION_ID_,
+		tt.PROC_INST_ID_,
+		tt.PROC_DEF_ID_,
+		tt.TASK_DEF_KEY_,
+		tt.ASSIGNEE_,
+		tt.START_TIME_,
+		tt.END_TIME_,
+		tt.FORM_KEY_,
+		tt.NAME_,
+		tt.TITLE from (
+		 <![CDATA[
+	 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_, 
+		res.FORM_KEY_,
+	    res.START_TIME_,
+	    res.END_TIME_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+		FROM
+		act_hi_taskinst res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId 
+				and info.state='99'
+		]]>
+		<where>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_, 
+		 res.START_TIME_,
+	     res.END_TIME_,
+		res.FORM_KEY_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+		FROM
+		act_hi_taskinst res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+				and info.state='99'
+		]]>
+		<where>
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		) tt where 1=1
+		<if test="pageIndex!=null and pageSize!=null">
+				 <![CDATA[ limit #{pageIndex},#{pageSize}]]>
+		</if>
+	</select>
+	<select id="findMyTasks4Done" parameterType="Map" resultType="INTEGER">
+		 <![CDATA[	
+		 select count(1)
+		     FROM (
+				 select DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_, 
+						res.FORM_KEY_,
+						info.YWNAME, 
+						res.START_TIME_,
+						res.END_TIME_,
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+						FROM
+						act_hi_taskinst res
+						inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+					info.processInstanceId  
+					and info.state !='0'
+		]]>
+		<where>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT   DISTINCT
+						res.ID_,
+						res.EXECUTION_ID_,
+						res.PROC_INST_ID_,
+						res.PROC_DEF_ID_,
+						res.TASK_DEF_KEY_,
+						res.ASSIGNEE_, 
+						res.FORM_KEY_,
+						info.YWNAME, 
+						res.START_TIME_,
+						res.END_TIME_,
+						concat('待',res.NAME_) NAME_,
+						concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+				FROM
+				act_hi_taskinst res
+				inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+				info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+				and info.state !='0'
+		]]>
+		<where>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		) t
+	</select>
+
+	<select id="findMyTasksList4Done" parameterType="Map"
+		resultMap="ActRuTaskResult">
+		select tt.ID_,
+		tt.EXECUTION_ID_,
+		tt.PROC_INST_ID_,
+		tt.PROC_DEF_ID_,
+		tt.TASK_DEF_KEY_,
+		tt.ASSIGNEE_,
+		tt.FORM_KEY_,
+		tt.START_TIME_,
+		tt.END_TIME_,
+		tt.NAME_,
+		tt.TITLE from (
+		 <![CDATA[
+	 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_, 
+		res.FORM_KEY_,
+		res.START_TIME_,
+		res.END_TIME_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+		FROM
+		act_hi_taskinst res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId  
+				and info.state !='0'
+		]]>
+		<where>
+			<if test="title!=null and title!='' ">
+			 <![CDATA[ 	and concat_ws('-', info.YWNAME, concat('待',res.NAME_)) like #{title}]]>
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		union
+		<![CDATA[
+			 SELECT
+		DISTINCT
+		res.ID_,
+		res.EXECUTION_ID_,
+		res.PROC_INST_ID_,
+		res.PROC_DEF_ID_,
+		res.TASK_DEF_KEY_,
+		res.ASSIGNEE_, 
+		res.FORM_KEY_,
+		res.START_TIME_,
+		res.END_TIME_,
+		concat('待',res.NAME_) NAME_,
+		concat_ws('-', info.YWNAME, concat('待',res.NAME_)) TITLE
+		FROM
+		act_hi_taskinst res
+		inner JOIN bus_base_info info ON res.PROC_INST_ID_ =
+		info.processInstanceId AND info.wfKey = 'kzwfcgl_30_process'
+				and info.state !='0'
+		]]>
+		<where>
+			<if test="moduleId!=null and moduleId!='' ">
+			 <![CDATA[ 	and exists(select 1 from sys_module_detail d where info.moduleId=d.id and d.parentId =#{moduleId} ) ]]>
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				 <![CDATA[  and info.projectId = #{projectId}]]>
+			</if>
+
+			<if test="assignee_!=null and assignee_!='' ">
+				 <![CDATA[	and res.ASSIGNEE_=#{assignee_}]]>
+			</if>
+		</where>
+		) tt where 1=1
+		<if test="pageIndex!=null and pageSize!=null">
+				 <![CDATA[ limit #{pageIndex},#{pageSize}]]>
+		</if>
+	</select>
+</mapper>

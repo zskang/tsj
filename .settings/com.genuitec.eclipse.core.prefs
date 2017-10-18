@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+validator.Checked=src/main/webapp/js/jquery.js,src/main/webapp/js/select-ui.min.js,corechart.I.js,src/main/webapp/js/sockjs.min.js,default,src/main/webapp/js/artDialog,src/main/resource/ehcache.xml,src/main/webapp/sys-role.jsp,src/main/webapp/js/format+zh_CN,src/main/webapp/js/select_ui/select-ui.min.js,src/main/webapp/js/echarts
+validator.Unchecked=

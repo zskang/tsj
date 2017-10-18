@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="wjffjl_13_index" name="wjffjl_13_index" isExecutable="true">
+    <startEvent id="ks" name="Start"></startEvent>
+    <endEvent id="js" name="End"></endEvent>
+    <userTask id="spsq" name="批准申请" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-edit.jsp?sfEdit=Y&amp;sfUpload=Y&amp;wfName=文件发放记录工作任务流程&amp;nextMan=documenter&amp;doName=批准申请&amp;isChild=N&amp;sfTz=N&amp;nodes=2"></userTask>
+    <userTask id="ffdj" name="发放登记" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=99&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=NULL&amp;doName=发放登记&amp;wfName=文件发放记录工作任务流程&amp;nextName=NULL&amp;sfTz=N&amp;previoState=NULL&amp;sfEdit=Y&amp;sfUpload=N&amp;isChild=N"></userTask>
+    <sequenceFlow id="tjsq" name="提交申请" sourceRef="spsq" targetRef="ffdj"></sequenceFlow>
+    <sequenceFlow id="dj" name="登记" sourceRef="ffdj" targetRef="js"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="ks" targetRef="spsq"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_wjffjl_13_index">
+    <bpmndi:BPMNPlane bpmnElement="wjffjl_13_index" id="BPMNPlane_wjffjl_13_index">
+      <bpmndi:BPMNShape bpmnElement="ks" id="BPMNShape_ks">
+        <omgdc:Bounds height="35.0" width="35.0" x="180.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="js" id="BPMNShape_js">
+        <omgdc:Bounds height="35.0" width="35.0" x="930.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="spsq" id="BPMNShape_spsq">
+        <omgdc:Bounds height="65.0" width="181.0" x="290.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ffdj" id="BPMNShape_ffdj">
+        <omgdc:Bounds height="65.0" width="165.0" x="580.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="tjsq" id="BPMNEdge_tjsq">
+        <omgdi:waypoint x="471.0" y="282.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="282.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="471.0" y="282.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="dj" id="BPMNEdge_dj">
+        <omgdi:waypoint x="745.0" y="282.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="282.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="745.0" y="282.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="215.0" y="282.0"></omgdi:waypoint>
+        <omgdi:waypoint x="290.0" y="282.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

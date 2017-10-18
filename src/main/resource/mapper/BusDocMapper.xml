@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.promore.bf.mydao.BusDocDao">
+
+	<resultMap type="BusDocEntity" id="BusDocEntityResult">
+		<result property="id" column="id" />
+		<result property="docName" column="docName" />
+		<result property="state" column="state" />
+		<result property="docPath" column="docPath" />
+		<result property="docType" column="docType" />
+		<result property="busId" column="busId" />
+		<result property="createTime" column="createTime" />
+		<result property="createMan" column="createMan" />
+	</resultMap>
+
+	<insert id="saveEntity" parameterType="BusDocEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		bus_doc_info(id,docName,docPath,state,busId,createTime,createMan,docType)
+		values(null,#{docName},#{docPath},#{state},#{busId},#{createTime},#{createMan},#{docType})
+	</insert>
+
+
+	<delete id="removeAll" parameterType="Map">
+		DELETE from bus_doc_info
+		where busId=#{busId}
+	</delete>
+
+	<delete id="removeEntityById" parameterType="INTEGER">
+		DELETE from
+		bus_doc_info where Id=#{Id}
+	</delete>
+	
+	<select id="findById" parameterType="INTEGER" resultType="BusDocEntity">
+		select * from
+		bus_doc_info
+		where Id=#{Id}
+	</select>
+
+	<select id="queryListByBusId" parameterType="Map" resultMap="BusDocEntityResult">
+		select * from bus_doc_info where busId=#{busId}
+	</select>
+
+</mapper>

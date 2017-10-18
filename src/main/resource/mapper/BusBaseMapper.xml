@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.promore.bf.mydao.BusBaseDao">
+
+	<resultMap type="BusBaseEntity" id="BusBaseEntityResult">
+		<result property="id" column="id" />
+		<result property="remark1" column="remark1" />
+		<result property="remark2" column="remark2" />
+		<result property="jdsj" column="jdsj" />
+		<result property="state" column="state" />
+		<result property="processInstanceId" column="processInstanceId" />
+		<result property="userid" column="userid" />
+		<result property="parentId" column="parentId" />
+		<result property="zrrenid" column="zrrenid" />
+		<result property="wdbh" column="wdbh" />
+		<result property="bgbh" column="bgbh" />
+		<result property="gcdwmc" column="gcdwmc" />
+		<result property="jsjdmc" column="jsjdmc" />
+		<result property="lxfs" column="lxfs" />
+		<result property="sjwcsj" column="sjwcsj" />
+		<result property="jhwcsj2" column="jhwcsj2" />
+		<result property="sjwcsj2" column="sjwcsj2" />
+		<result property="jhwcsj1" column="jhwcsj1" />
+		<result property="sjkssj" column="sjkssj" />
+		<result property="jhkssj" column="jhkssj" />
+		<result property="pubTime" column="pubTime" />
+		<result property="wfKey" column="wfKey" />
+		<result property="dqczr" column="dqczr" />
+		<result property="taskExcuter" column="taskExcuter" />
+		<result property="projectId" column="projectId" />
+		<result property="projectName" column="projectName" />
+		<result property="projectType" column="projectType" />
+		<result property="moduleId" column="moduleId" />
+		<result property="ywName" column="ywName" />
+		<result property="dqczr" column="dqczr" />
+		<result property="nodes" column="nodes" />
+		<result property="ziping" column="ziping" />
+		<result property="xmjlb" column="xmjlb" />
+		<result property="jianli" column="jianli" />
+		<result property="yezhu" column="yezhu" />
+		<result property="zigs" column="zigs" />
+		<result property="gsi" column="gsi" />
+		<result property="gfgs" column="gfgs" />
+		<result property="sfjd" column="sfjd" />
+		<result property="sfff" column="sfff" />
+		<result property="sftz" column="sftz" />
+		<result property="sfgfxznd" column="sfgfxznd" />
+		<result property="fadj" column="fadj" />
+		<result property="fwdw" column="fwdw" />
+		<result property="fbfxmc" column="fbfxmc" />
+		<result property="bjjr" column="bjjr" />
+		<result property="jsgljdfl" column="jsgljdfl" />
+	</resultMap>
+
+	<select id="queryListByParentId" parameterType="java.lang.Integer"
+		resultMap="BusBaseEntityResult">
+		select * from bus_base_info where parentId=
+		#{parentId,jdbcType=INTEGER}
+	</select>
+
+	<select id="getAllPage" parameterType="Map" resultMap="BusBaseEntityResult">
+		SELECT
+		t.ywName,
+		t.id,
+		t.remark1,
+		t.remark2,
+		t.jdsj,
+		t.processInstanceId,
+		sysuser2.chinesename taskExcuter,
+		t.projectId,
+		t.projectName,
+		t.projectType,
+		module.NAME moduleId,
+		t.wfKey,
+		t.jhwcsj1,
+		t.jhwcsj2,
+		t.sjwcsj2,
+		t.sjwcsj,
+		t.lxfs,
+		t.jsjdmc,
+		t.gcdwmc,
+		t.wdbh,
+		t.zrrenid,
+		sysuser.chinesename userid,
+		t.parentId,
+		CASE t.state
+		WHEN 0 THEN
+		'待提交'
+		WHEN 1 THEN
+		'待审核'
+		WHEN 2 THEN
+		'待复核'
+		WHEN 3 THEN
+		'已驳回'
+		WHEN 4 THEN
+		'待归卷'
+		WHEN 5
+		THEN
+		'待检查通报'
+		WHEN 6 THEN
+		'待编制交底计划'
+		WHEN 7 THEN
+		'待审批'
+		WHEN 8 THEN
+		'待编制'
+		WHEN 9
+		THEN
+		'待汇总'
+		WHEN 10 THEN
+		'待整理'
+		WHEN 11 THEN
+		'待绘制矩阵'
+		WHEN 12 THEN
+		'待签字确认'
+		WHEN
+		13 THEN
+		'待绘制矩阵'
+		WHEN 14 THEN
+		'待文件核稿'
+		WHEN 15 THEN
+		'待借阅登记'
+		WHEN 16 THEN
+		'发放登记'
+		WHEN 17 THEN
+		'待整改验证'
+
+
+		WHEN 18 THEN
+		'待制定计划'
+		WHEN 19 THEN
+		'待制定技术管理'
+		WHEN
+		20 THEN
+		'待分工'
+		WHEN 21 THEN
+		'待文件阅处'
+		WHEN 22 THEN
+		'待文件执行'
+		WHEN 23 THEN
+		'待文件归还'
+		WHEN 24 THEN
+		'待归还'
+		WHEN 25 THEN
+		'待标准更新'
+		WHEN 26 THEN
+		'待编制查新记录'
+		WHEN 27 THEN
+		'待台账更新'
+		WHEN 28 THEN
+		'待复核汇总'
+		WHEN 29 THEN
+		'待合同拟定'
+		WHEN 30 THEN
+		'待合同结算'
+		WHEN
+		31 THEN
+		'待物资总控计划'
+		WHEN 32 THEN
+		'待会议纪要形成'
+		WHEN 33 THEN
+		'待形成交底会议记录'
+		WHEN 34
+		THEN
+		'待关键工序界定'
+		WHEN 35 THEN
+		'待编制清单'
+		WHEN 36 THEN
+		'待特殊过程界定'
+		WHEN 37 THEN
+		'待登记仪器管理台账'
+		WHEN 38 THEN
+		'待编制勘查记录'
+		WHEN 39 THEN
+		'待编制交接桩记录'
+		WHEN 40 THEN
+		'待计算编制'
+		WHEN 41 THEN
+		'待编辑技术交底方案'
+		WHEN 42 THEN
+		'待交底下发'
+		WHEN 43 THEN
+		'待编制交底计划书'
+		WHEN 44 THEN
+		'待施工放样记录'
+		WHEN 45 THEN
+		'待高程测量记录'
+		WHEN 46 THEN
+		'待放样图解记录'
+		WHEN 47 THEN
+		'待下发网复测记录'
+		WHEN 48 THEN
+		'待控制网复测记录接收'
+		WHEN 49 THEN
+		'待阅处'
+		WHEN 50 THEN
+		'待竣工测量'
+		WHEN 51 THEN
+		'待汇总审核'
+		WHEN 52 THEN
+		'待回复'
+
+		ELSE
+		'已完毕'
+		END AS state,
+		t.sjkssj,
+		t.jhkssj,
+		t.pubTime,
+		sysuser3.chinesename dqczr,
+		t.fadj,
+		t.bjjr,
+		t.jsgljdfl
+		FROM
+		bus_base_info t
+		LEFT JOIN sys_user sysuser ON t.userid = sysuser.id
+		LEFT JOIN sys_user sysuser2 ON t.taskExcuter = sysuser2.id
+		LEFT JOIN
+		sys_user sysuser3 ON t.dqczr = sysuser3.id
+		LEFT JOIN sys_module module
+		ON t.moduleId = module.id
+		<where>
+			<if test="userid!=null and userid!='' ">
+				and userid = #{userid}
+			</if>
+
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+		</where>
+		order by t.pubTime desc
+		<if test="pageIndex!=null and pageSize!=null">
+			limit #{pageIndex},#{pageSize}
+		</if>
+	</select>
+
+	<select id="getCount" parameterType="Map" resultType="int">
+		select count(1) from bus_base_info
+		<where>
+			<if test="userid!=null and userid!='' ">
+				and userid = #{userid}
+			</if>
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="getCountforNoneDone" parameterType="Map" resultType="int">
+		select count(1) from bus_base_info
+		<where>
+			<if test="wfKey!=null and wfKey!='' ">
+				and wfKey = #{wfKey}
+			</if>
+			<if test="projectId!=null and projectId!='' ">
+				and projectId = #{projectId}
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				and moduleId = #{moduleId}
+			</if>
+
+			<if test="state!=null and state!='' ">
+				and state = #{state}
+			</if>
+
+		</where>
+	</select>
+
+	<insert id="saveBusBaseEntity" parameterType="BusBaseEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		bus_base_info(ywName,
+		id,
+		remark1,
+		remark2,
+		jdsj,
+		state,
+		processInstanceId,
+		userid,
+		projectId,
+		projectName,
+		projectType,
+		taskExcuter,
+		moduleId,
+		wfKey,
+		jhwcsj1,
+		jhwcsj2,
+		sjwcsj2,
+		sjwcsj,
+		lxfs,
+		jsjdmc,
+		gcdwmc,
+		wdbh,
+		bgbh,
+		zrrenid,
+		parentId,
+		sjkssj,
+		jhkssj,
+		pubTime,
+		dqczr,
+		nodes,
+		ziping,
+		xmjlb,
+		jianli,
+		yezhu,
+		zigs,
+		gsi,
+		gfgs,
+		sfjd,
+		sfff,
+		sftz,
+		sfgfxznd,
+		fadj,
+		fwdw,
+		fbfxmc,
+		bjjr,
+		jsgljdfl)
+		values(
+		#{ywName},
+		null,
+		#{remark1},
+		#{remark2},
+		#{jdsj},
+		#{state},
+		#{processInstanceId},
+		#{userid},
+		#{projectId},
+		#{projectName},
+		#{projectType},
+		#{taskExcuter},
+		#{moduleId},
+		#{wfKey},
+		#{jhwcsj1},
+		#{jhwcsj2},
+		#{sjwcsj2},
+		#{sjwcsj},
+		#{lxfs},
+		#{jsjdmc},
+		#{gcdwmc},
+		#{wdbh},
+		#{bgbh},
+		#{zrrenid},
+		#{parentId},
+		#{sjkssj},
+		#{jhkssj},
+		#{pubTime},
+		#{dqczr},
+		#{nodes},
+		#{ziping},
+		#{xmjlb},
+		#{jianli},
+		#{yezhu},
+		#{zigs},
+		#{gsi},
+		#{gfgs},
+		#{sfjd},
+		#{sfff},
+		#{sftz},
+		#{sfgfxznd},
+		#{fadj},
+		#{fwdw},
+		#{fbfxmc},
+		#{bjjr},
+		#{jsgljdfl})
+	</insert>
+
+	<update id="updateBusBaseEntity4Gzjj" parameterType="Map">
+		update bus_base_info
+		<set>
+			<if test="bjjr!=null and bjjr!='' ">
+				taskExcuter=#{bjjr},
+			</if>
+			<if test="userid!=null and userid!='' ">
+				userid=#{userid}
+			</if>
+		</set>
+		where userid=#{userid,jdbcType=INTEGER} and projectId=#{projectId}
+	</update>
+
+
+
+	<update id="updateBusBaseEntity" parameterType="BusBaseEntity">
+		update bus_base_info
+		<set>
+			<if test="state!=null and state!='' ">
+				state=#{state},
+			</if>
+			<if test="remark1!=null and remark1!='' ">
+				remark1=#{remark1},
+			</if>
+
+			<if test="remark2!=null and remark2!='' ">
+				remark2=#{remark2},
+			</if>
+
+			<if test="processInstanceId!=null and processInstanceId!='' ">
+				processInstanceId=#{processInstanceId},
+			</if>
+
+			<if test="jdsj!=null and jdsj!='' ">
+				jdsj=#{jdsj},
+			</if>
+
+			<if test="projectId!=null and projectId!='' ">
+				projectId=#{projectId},
+			</if>
+
+			<if test="projectName!=null and projectName!='' ">
+				projectName=#{projectName},
+			</if>
+
+			<if test="projectType!=null and projectType!='' ">
+				projectType=#{projectType},
+			</if>
+
+			<if test="dqczr!=null and dqczr!='' ">
+				dqczr=#{dqczr},
+			</if>
+
+			<if test="taskExcuter!=null and taskExcuter!='' ">
+				taskExcuter=#{taskExcuter},
+			</if>
+
+			<if test="jhwcsj1!=null and jhwcsj1!='' ">
+				jhwcsj1=#{jhwcsj1},
+			</if>
+
+			<if test="jhwcsj2!=null and jhwcsj2!='' ">
+				jhwcsj2=#{jhwcsj2},
+			</if>
+
+			<if test="sjwcsj2!=null and sjwcsj2!='' ">
+				sjwcsj2=#{sjwcsj2},
+			</if>
+
+			<if test="sjwcsj!=null and sjwcsj!='' ">
+				sjwcsj=#{sjwcsj},
+			</if>
+
+			<if test="sjkssj!=null and sjkssj!='' ">
+				sjkssj=#{sjkssj},
+			</if>
+
+			<if test="jhkssj!=null and jhkssj!='' ">
+				jhkssj=#{jhkssj},
+			</if>
+
+			<if test="lxfs!=null and lxfs!='' ">
+				lxfs=#{lxfs},
+			</if>
+			<if test="jsjdmc!=null and jsjdmc!='' ">
+				jsjdmc=#{jsjdmc},
+			</if>
+
+			<if test="gcdwmc!=null and gcdwmc!='' ">
+				gcdwmc=#{gcdwmc},
+			</if>
+
+			<if test="nodes!=null and nodes!='' ">
+				nodes=#{nodes},
+			</if>
+
+			<if test="ziping!=null and ziping!='' ">
+				ziping=#{ziping},
+			</if>
+
+			<if test="xmjlb!=null and xmjlb!='' ">
+				xmjlb=#{xmjlb},
+			</if>
+
+			<if test="jianli!=null and jianli!='' ">
+				jianli=#{jianli},
+			</if>
+
+			<if test="yezhu!=null and yezhu!='' ">
+				yezhu=#{yezhu},
+			</if>
+
+			<if test="zigs!=null and zigs!='' ">
+				zigs=#{zigs},
+			</if>
+
+			<if test="gsi!=null and gsi!='' ">
+				gsi=#{gsi},
+			</if>
+
+			<if test="gfgs!=null and gfgs!='' ">
+				gfgs=#{gfgs},
+			</if>
+
+			<if test="sfjd!=null and sfjd!='' ">
+				sfjd=#{sfjd},
+			</if>
+			<if test="sfff!=null and sfff!='' ">
+				sfff=#{sfff},
+			</if>
+			<if test="sftz!=null and sftz!='' ">
+				sftz=#{sftz},
+			</if>
+			<if test="sfgfxznd!=null and sfgfxznd!='' ">
+				sfgfxznd=#{sfgfxznd},
+			</if>
+			<if test="fadj!=null and fadj!='' ">
+				fadj=#{fadj},
+			</if>
+			<if test="fwdw!=null and fwdw!='' ">
+				fwdw=#{fwdw},
+			</if>
+			<if test="fbfxmc!=null and fbfxmc!='' ">
+				fbfxmc=#{fbfxmc},
+			</if>
+			<if test="bjjr!=null and bjjr!='' ">
+				bjjr=#{bjjr},
+			</if>
+			<if test="jsgljdfl!=null and jsgljdfl!='' ">
+				jsgljdfl=#{jsgljdfl}
+			</if>
+		</set>
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="getBusBaseEntityById" parameterType="INTEGER"
+		resultMap="BusBaseEntityResult">
+		select *
+		from bus_base_info where id=#{id,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="getBusBaseEntityByTaskId" parameterType="String"
+		resultMap="BusBaseEntityResult">
+		select * from bus_base_info
+		where
+		processInstanceId=#{processInstanceId}
+	</select>
+
+
+	<delete id="deleteBusBaseEntity" parameterType="BusBaseEntity">
+		delete FROM
+		bus_base_info
+		where id=#{id,jdbcType=INTEGER}
+	</delete>
+
+</mapper> 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.promore.bf.mydao.ExecutionEntityMapper">
+	
+	<update id="updateExecution" parameterType="java.util.Map">
+		UPDATE act_ru_execution SET ACT_ID_ = #{actId} WHERE PROC_INST_ID_ = #{procInstId}
+	</update>
+	
+	<select id="queryUserIdByRoleId" parameterType="Map" resultType="java.util.Map">
+		SELECT a.user_id userId, a.role_id roleId FROM sys_user_role a, sys_role b WHERE a.role_id = b.id AND b.shortName = #{shortName}
+	</select>
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.promore.bf.mydao.NodeConfigDao">
+
+	<resultMap type="NodeConfigEntity" id="NodeConfigEntityResult">
+		<result property="id" column="id" />
+		<result property="nodeName" column="nodeName" />
+		<result property="nodeid" column="nodeid" />
+		<result property="wfkey" column="wfkey" />
+		<result property="datestr" column="datestr" />
+	</resultMap>
+
+	<select id="queryNodeConfiglist" parameterType="Map"
+		resultMap="NodeConfigEntityResult">
+		select nc.* from tb_node_config nc where nc.wfkey=#{wfkey}
+	</select>
+
+
+
+	<select id="getEntity" parameterType="Map" resultMap="NodeConfigEntityResult">
+		select nc.*
+		from tb_node_config nc where nc.id=#{id}
+	</select>
+
+
+	<insert id="saveEntity" parameterType="NodeConfigEntity"
+		useGeneratedKeys="true" keyProperty="id">
+
+		insert into
+
+		tb_node_config(id,nodeid,nodeName,wfkey,datestr)
+
+		values(null,#{nodeid},#{nodeName},#{wfkey},#{datestr})
+
+	</insert>
+
+	<update id="updateNodeCondig" parameterType="NodeConfigEntity">
+		update tb_node_config
+		<set>
+			<if test="datestr!=null and datestr!='' ">
+				datestr=#{datestr},
+			</if>
+		</set>
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

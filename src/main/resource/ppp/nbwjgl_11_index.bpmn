@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="nbwjgl_11_index" name="nbwjgl_11_index" isExecutable="true">
+    <startEvent id="ks" name="Start"></startEvent>
+    <endEvent id="js" name="End"></endEvent>
+    <userTask id="wjng" name="文件拟稿" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-edit.jsp?sfEdit=Y&amp;sfUpload=N&amp;wfName=内部文件技术管理工作任务流程&amp;nextMan=workMinister&amp;doName=文件拟稿&amp;isChild=N&amp;sfTz=Y&amp;nodes=5"></userTask>
+    <userTask id="wjhg" name="文件核稿" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=1&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=ProjectEngineer&amp;doName=文件核稿&amp;wfName=内部文件技术管理工作任务流程&amp;nextName=审核&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=N&amp;sfUpload=N&amp;isChild=N"></userTask>
+    <userTask id="sh" name="审核" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=7&amp;sfSh=Y&amp;sfBack=Y&amp;nextMan=ProjectManager&amp;doName=审核&amp;wfName=内部文件技术管理工作任务流程&amp;nextName=审批&amp;sfTz=Y&amp;previoState=14&amp;sfEdit=N&amp;sfUpload=N&amp;isChild=N"></userTask>
+    <userTask id="sp" name="审批" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=4&amp;sfSh=Y&amp;sfBack=Y&amp;nextMan=documenter&amp;doName=审批&amp;wfName=内部文件技术管理工作任务流程&amp;nextName=文件归卷、更新文件清单&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=N&amp;sfUpload=N&amp;isChild=N"></userTask>
+    <userTask id="wjgjgxwjqd" name="文件归卷，更新文件清单" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=99&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=NULL&amp;doName=文件归卷、更新文件清单&amp;wfName=内部文件技术管理工作任务流程&amp;nextName=NULL&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=Y&amp;sfUpload=N&amp;isChild=N"></userTask>
+    <sequenceFlow id="flow1" sourceRef="ks" targetRef="wjng"></sequenceFlow>
+    <sequenceFlow id="ng" name="拟稿" sourceRef="wjng" targetRef="wjhg"></sequenceFlow>
+    <sequenceFlow id="tjsh" name="提交" sourceRef="wjhg" targetRef="sh"></sequenceFlow>
+    <sequenceFlow id="tjsps" name="通过" sourceRef="sh" targetRef="sp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="xmzgbh" name="驳回" sourceRef="sh" targetRef="wjhg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="xmjlbh" name="驳回" sourceRef="sp" targetRef="sh">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="gj" name="归卷" sourceRef="wjgjgxwjqd" targetRef="js"></sequenceFlow>
+    <sequenceFlow id="sptg" name="通过" sourceRef="sp" targetRef="wjgjgxwjqd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_nbwjgl_11_index">
+    <bpmndi:BPMNPlane bpmnElement="nbwjgl_11_index" id="BPMNPlane_nbwjgl_11_index">
+      <bpmndi:BPMNShape bpmnElement="ks" id="BPMNShape_ks">
+        <omgdc:Bounds height="35.0" width="35.0" x="120.0" y="275.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="js" id="BPMNShape_js">
+        <omgdc:Bounds height="35.0" width="37.0" x="1310.0" y="275.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wjng" id="BPMNShape_wjng">
+        <omgdc:Bounds height="65.0" width="105.0" x="250.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wjhg" id="BPMNShape_wjhg">
+        <omgdc:Bounds height="65.0" width="135.0" x="430.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sh" id="BPMNShape_sh">
+        <omgdc:Bounds height="55.0" width="105.0" x="660.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sp" id="BPMNShape_sp">
+        <omgdc:Bounds height="55.0" width="105.0" x="890.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wjgjgxwjqd" id="BPMNShape_wjgjgxwjqd">
+        <omgdc:Bounds height="75.0" width="105.0" x="1120.0" y="255.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="155.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="292.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="ng" id="BPMNEdge_ng">
+        <omgdi:waypoint x="355.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="430.0" y="292.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="355.0" y="292.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="tjsh" id="BPMNEdge_tjsh">
+        <omgdi:waypoint x="565.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="660.0" y="292.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="565.0" y="292.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="tjsps" id="BPMNEdge_tjsps">
+        <omgdi:waypoint x="765.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="890.0" y="292.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="790.0" y="292.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="xmzgbh" id="BPMNEdge_xmzgbh">
+        <omgdi:waypoint x="712.0" y="265.0"></omgdi:waypoint>
+        <omgdi:waypoint x="712.0" y="218.0"></omgdi:waypoint>
+        <omgdi:waypoint x="497.0" y="218.0"></omgdi:waypoint>
+        <omgdi:waypoint x="497.0" y="260.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="571.0" y="216.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="xmjlbh" id="BPMNEdge_xmjlbh">
+        <omgdi:waypoint x="942.0" y="320.0"></omgdi:waypoint>
+        <omgdi:waypoint x="942.0" y="366.0"></omgdi:waypoint>
+        <omgdi:waypoint x="712.0" y="366.0"></omgdi:waypoint>
+        <omgdi:waypoint x="712.0" y="320.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="834.0" y="350.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="gj" id="BPMNEdge_gj">
+        <omgdi:waypoint x="1225.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1310.0" y="292.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="1225.0" y="292.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sptg" id="BPMNEdge_sptg">
+        <omgdi:waypoint x="995.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1120.0" y="292.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="1020.0" y="292.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

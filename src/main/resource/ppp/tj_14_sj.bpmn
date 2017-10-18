@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="tj_14_sj" name="tj_14_sj" isExecutable="true">
+    <startEvent id="ks" name="Start"></startEvent>
+    <userTask id="gfbzsj" name="图集标准收集" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-edit.jsp?sfEdit=Y&amp;sfUpload=Y&amp;wfName=图集标准台账工作任务流程&amp;nextMan=workMinister&amp;doName=图集标准收集&amp;isChild=N&amp;sfTz=Y&amp;nodes=4"></userTask>
+    <userTask id="fhhz" name="复核汇总" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=1&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=ProjectEngineer&amp;doName=复核汇总&amp;wfName=图集标准台账工作任务流程&amp;nextName=审核&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=Y&amp;sfUpload=Y&amp;isChild=N"></userTask>
+    <userTask id="sh" name="审核" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=4&amp;sfSh=Y&amp;sfBack=Y&amp;nextMan=documenter&amp;doName=审核&amp;wfName=图集标准台账工作任务流程&amp;nextName=台账归卷&amp;sfTz=Y&amp;previoState=28&amp;sfEdit=N&amp;sfUpload=N&amp;isChild=N"></userTask>
+    <userTask id="tzgj" name="台账归卷" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=99&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=NULL&amp;doName=台账归卷&amp;wfName=图集标准台账工作任务流程&amp;nextName=NULL&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=Y&amp;sfUpload=N&amp;isChild=N"></userTask>
+    <sequenceFlow id="flow1" sourceRef="ks" targetRef="gfbzsj"></sequenceFlow>
+    <sequenceFlow id="tjfh" name="提交" sourceRef="gfbzsj" targetRef="fhhz"></sequenceFlow>
+    <sequenceFlow id="fhtg" name="通过" sourceRef="fhhz" targetRef="sh">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="shtg" name="通过" sourceRef="sh" targetRef="tzgj">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="shbtg" name="驳回" sourceRef="sh" targetRef="fhhz">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="gj" name="归卷" sourceRef="tzgj" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="gcbzbh" name="驳回" sourceRef="fhhz" targetRef="gfbzsj">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_tj_14_sj">
+    <bpmndi:BPMNPlane bpmnElement="tj_14_sj" id="BPMNPlane_tj_14_sj">
+      <bpmndi:BPMNShape bpmnElement="ks" id="BPMNShape_ks">
+        <omgdc:Bounds height="35.0" width="35.0" x="50.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gfbzsj" id="BPMNShape_gfbzsj">
+        <omgdc:Bounds height="65.0" width="105.0" x="190.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="fhhz" id="BPMNShape_fhhz">
+        <omgdc:Bounds height="65.0" width="105.0" x="410.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sh" id="BPMNShape_sh">
+        <omgdc:Bounds height="55.0" width="105.0" x="620.0" y="255.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tzgj" id="BPMNShape_tzgj">
+        <omgdc:Bounds height="65.0" width="125.0" x="830.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="1040.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="85.0" y="282.0"></omgdi:waypoint>
+        <omgdi:waypoint x="190.0" y="282.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="tjfh" id="BPMNEdge_tjfh">
+        <omgdi:waypoint x="295.0" y="282.0"></omgdi:waypoint>
+        <omgdi:waypoint x="410.0" y="282.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="295.0" y="282.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="fhtg" id="BPMNEdge_fhtg">
+        <omgdi:waypoint x="515.0" y="282.0"></omgdi:waypoint>
+        <omgdi:waypoint x="620.0" y="282.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="515.0" y="282.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="shtg" id="BPMNEdge_shtg">
+        <omgdi:waypoint x="725.0" y="282.0"></omgdi:waypoint>
+        <omgdi:waypoint x="830.0" y="282.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="730.0" y="282.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="shbtg" id="BPMNEdge_shbtg">
+        <omgdi:waypoint x="672.0" y="310.0"></omgdi:waypoint>
+        <omgdi:waypoint x="672.0" y="365.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.0" y="365.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.0" y="315.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="521.0" y="344.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="gj" id="BPMNEdge_gj">
+        <omgdi:waypoint x="955.0" y="282.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1040.0" y="282.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="955.0" y="282.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="gcbzbh" id="BPMNEdge_gcbzbh">
+        <omgdi:waypoint x="462.0" y="250.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.0" y="202.0"></omgdi:waypoint>
+        <omgdi:waypoint x="242.0" y="202.0"></omgdi:waypoint>
+        <omgdi:waypoint x="242.0" y="250.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="330.0" y="206.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.promore.bf.mydao.FileEntityDao">
+
+	<resultMap type="FileEntity" id="FileEntityResult">
+		<result property="id" column="id" />
+		<result property="fileName" column="fileName" />
+		<result property="state" column="state" />
+		<result property="path" column="path" />
+		<result property="ywid" column="ywid" />
+		<result property="taskid" column="taskid" />
+		<result property="scsj" column="scsj" />
+		<result property="fileExt" column="fileExt" />
+	</resultMap>
+
+
+	<insert id="saveEntity" parameterType="FileEntity"
+		useGeneratedKeys="true" keyProperty="id">
+
+		insert into
+
+		bus_attach_info(id,ywid,taskid,state,fileName,path,scsj,fileExt)
+
+		values(null,#{ywid,jdbcType=INTEGER},#{taskid,jdbcType=INTEGER},#{state},
+
+		#{fileName},#{path},#{scsj},#{fileExt})
+
+	</insert>
+
+	<delete id="deleteEntity" parameterType="Map">
+		delete from
+		bus_attach_info where id=#{ID}
+	</delete>
+
+	<select id="findById" parameterType="INTEGER" resultMap="FileEntityResult">
+		select *
+		from bus_attach_info where id=#{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryListByYwid" parameterType="Map" resultMap="FileEntityResult">
+		select * from bus_attach_info where ywid=#{ywid}
+	</select>
+
+	<select id="queryListByYwid2" parameterType="Map" resultType="Map">
+		select * from bus_attach_info where ywid=#{ywid}
+	</select>
+
+	<delete id="removeAllAttachFiles" parameterType="Map">
+		delete from
+		bus_attach_info where ywid=#{ywid}
+	</delete>	
+	 
+	
+
+</mapper>

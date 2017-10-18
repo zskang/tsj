@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- 别名 -->
+    <typeAliases>
+        <package name="cn.promore.bf.model"/>
+    </typeAliases>
+    <mappers>
+        <mapper resource="mapper/FileEntityMapper.xml"/>
+        <mapper resource="mapper/TempFileEntityMapper.xml"/>
+        <mapper resource="mapper/BusBaseMapper.xml"/>
+        <mapper resource="mapper/MyWorkMapper.xml"/>
+        <mapper resource="mapper/SysActModulerMapper.xml"/>
+        <mapper resource="mapper/BusDocMapper.xml"/> 
+        <mapper resource="mapper/ActInstMapper.xml"/> 
+        <mapper resource="mapper/NodeConfigMapper.xml"/>
+        <mapper resource="mapper/ExecutionEntityMapper.xml"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="aqjsjd_36_do" name="aqjsjd_36_do" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="bzjsjd" name="编辑技术交底方案" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-edit.jsp?sfEdit=Y&amp;sfUpload=N&amp;wfName=安全技术工作任务流程&amp;nextMan=techofficor&amp;doName=编辑技术交底方案&amp;isChild=Y&amp;sfTz=Y&amp;nodes=5"></userTask>
+    <userTask id="fh" name="复核" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=1&amp;sfSh=Y&amp;sfBack=Y&amp;nextMan=workMinister&amp;doName=复核&amp;fName=安全技术工作任务流程&amp;nextName=审核&amp;sfTz=Y&amp;previoState=41&amp;sfEdit=N&amp;sfUpload=Y&amp;isChild=Y"></userTask>
+    <sequenceFlow id="tjsh" name="提交" sourceRef="bzjsjd" targetRef="fh"></sequenceFlow>
+    <userTask id="sh" name="审核" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=42&amp;sfSh=Y&amp;sfBack=Y&amp;nextMan=technician&amp;doName=审核&amp;fName=安全技术工作任务流程&amp;nextName=交底下发&amp;sfTz=Y&amp;previoState=2&amp;sfEdit=N&amp;sfUpload=N&amp;isChild=Y"></userTask>
+    <sequenceFlow id="fhtg" name="通过" sourceRef="fh" targetRef="sh">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="jdxf" name="交底下发" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=4&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=documenter&amp;doName=交底下发&amp;wfName=安全技术工作任务流程&amp;nextName=交底归卷并登记台账&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=Y&amp;sfUpload=Y&amp;isChild=Y"></userTask>
+    <sequenceFlow id="shtg" name="通过" sourceRef="sh" targetRef="jdxf">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="jdgj" name="归卷" activiti:assignee="#{taskExcuter}" activiti:dueDate="${dateVariable}" activiti:formKey="bus-common-work.jsp?nextState=99&amp;sfSh=Y&amp;sfBack=N&amp;nextMan=NULL&amp;doName=交底归卷并登记台账&amp;wfName=安全技术工作任务流程&amp;nextName=NULL&amp;sfTz=Y&amp;previoState=NULL&amp;sfEdit=Y&amp;sfUpload=N&amp;isChild=Y"></userTask>
+    <sequenceFlow id="xf" name="下发" sourceRef="jdxf" targetRef="jdgj"></sequenceFlow>
+    <sequenceFlow id="fhbtg" name="驳回" sourceRef="fh" targetRef="bzjsjd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="shbtg" name="驳回" sourceRef="sh" targetRef="fh">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="gjj" name="归卷" sourceRef="jdgj" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="bzjsjd"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_aqjsjd_36_do">
+    <bpmndi:BPMNPlane bpmnElement="aqjsjd_36_do" id="BPMNPlane_aqjsjd_36_do">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="120.0" y="280.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="bzjsjd" id="BPMNShape_bzjsjd">
+        <omgdc:Bounds height="55.0" width="105.0" x="337.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="fh" id="BPMNShape_fh">
+        <omgdc:Bounds height="55.0" width="105.0" x="575.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sh" id="BPMNShape_sh">
+        <omgdc:Bounds height="55.0" width="105.0" x="810.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="jdxf" id="BPMNShape_jdxf">
+        <omgdc:Bounds height="55.0" width="105.0" x="1020.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="jdgj" id="BPMNShape_jdgj">
+        <omgdc:Bounds height="65.0" width="105.0" x="1216.0" y="268.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="1440.0" y="283.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="tjsh" id="BPMNEdge_tjsh">
+        <omgdi:waypoint x="442.0" y="297.0"></omgdi:waypoint>
+        <omgdi:waypoint x="575.0" y="297.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="442.0" y="297.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="fhtg" id="BPMNEdge_fhtg">
+        <omgdi:waypoint x="680.0" y="297.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="297.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="680.0" y="297.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="shtg" id="BPMNEdge_shtg">
+        <omgdi:waypoint x="915.0" y="297.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1020.0" y="297.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="915.0" y="297.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="xf" id="BPMNEdge_xf">
+        <omgdi:waypoint x="1125.0" y="297.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1216.0" y="300.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="1125.0" y="297.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="fhbtg" id="BPMNEdge_fhbtg">
+        <omgdi:waypoint x="627.0" y="270.0"></omgdi:waypoint>
+        <omgdi:waypoint x="627.0" y="219.0"></omgdi:waypoint>
+        <omgdi:waypoint x="389.0" y="219.0"></omgdi:waypoint>
+        <omgdi:waypoint x="389.0" y="270.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="485.0" y="201.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="shbtg" id="BPMNEdge_shbtg">
+        <omgdi:waypoint x="862.0" y="325.0"></omgdi:waypoint>
+        <omgdi:waypoint x="862.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="627.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="627.0" y="325.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="740.0" y="369.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="gjj" id="BPMNEdge_gjj">
+        <omgdi:waypoint x="1321.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1440.0" y="300.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="1321.0" y="300.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="155.0" y="297.0"></omgdi:waypoint>
+        <omgdi:waypoint x="337.0" y="297.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

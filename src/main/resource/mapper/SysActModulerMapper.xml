@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.promore.bf.mydao.SysActModuleDao">
+	<resultMap type="SysActModuleEntity" id="SysActModuleEntityResult">
+		<result property="id" column="id" />
+		<result property="moduleId" column="moduleId" />
+		<result property="developKey" column="developKey" />
+	</resultMap>
+
+	<insert id="addEntity" parameterType="SysActModuleEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		sys_act_module(id,moduleId,developKey)
+		values(null,#{moduleId},#{developKey})
+	</insert>
+
+	<select id="queryCount" parameterType="Map" resultType="int">
+		select
+		count(1) from sys_act_module where moduleId=#{moduleId} and
+		developKey=#{developKey}
+	</select>
+	<select id="getModuleIdByWfKey" parameterType="Map" resultType="String">
+		select moduleId from sys_act_module where developKey=#{developKey}
+	</select>
+
+	<delete id="deleteByMap" parameterType="Map">
+		delete from
+		sys_act_module where developKey=#{developKey}
+	</delete>
+
+</mapper>

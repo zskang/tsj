@@ -1,0 +1,60 @@
+.tabs>.head {
+	height: 24px; overflow: hidden; white-space: nowrap;padding-left:1px;
+}
+.tabs>.hbar {
+	width: 100%; height: 2px; position: relative;
+	z-index: 2; top: 24px;
+}
+.tabs>.head>.sbtn {
+	width: 24px; height: 24px; float: left;
+	background: url(../images/tabs/tm-ts.png) repeat-x left bottom;
+}
+.tabs>.head>.sbtn span {
+	overflow: hidden; float: left; width: 16px; height: 16px;
+	margin: 4px; background-image: url(../images/tabs/icons.png);
+}
+.tabs>.head>.left span { background-position: -96px -48px; }
+.tabs>.head>.right_ span { background-position: -32px -48px; }
+.tabs>.head>.main { height: 24px; overflow: hidden; float: left; }
+.tabs>.head>.main>.tt { white-space: nowrap; display: inline-block; }
+.tabs>.body {
+	/*border: 1px solid #DDD; border-top: 0px; padding: 1px;*/ background-color: #FFF;
+}
+.tabs>.body>.main { padding: 0px; margin: 0px; overflow: auto;/* height:auto!important; */}
+.tabs>.head .item {
+	-moz-user-select: none; cursor: pointer;
+	height: 26px; position: relative;
+	white-space: nowrap; display: inline-block;
+}
+.tabs>.head .item>.main {
+	float: left; color: #FFF; height: 26px;	line-height: 26px;
+	text-align: center; padding-left: 2px; font-weight: bold; min-width: 40px;
+}
+.tabs>.head .item.closeable>.main { min-width: 60px;padding: 0 5px;}
+.tabs>.head .item>.xbtn {
+	float: left; height: 26px; width: 8px; overflow: hidden;
+}
+.tabs>.head .item>.xbtn>.icon { margin-left: -4px; }
+.tabs>.head .item>.xbtn>.icon:hover { background-position: -96px -128px; }
+.tabs>.head .item>.left { float: left; width: 6px; height: 26px; }
+.tabs>.head .item>.right { float: left; width: 6px; height: 26px; }
+.tabs>.head .normal_ { z-index: 1; }
+.tabs>.head .normal_>.main { background: url(../images/tabs/tm-bg.png) repeat-x; color: #FFF;padding: 0 5px; }
+.tabs>.head .normal_>.left { background: url(../images/tabs/tm-l.png) no-repeat; }
+.tabs>.head .normal_>.right { background: url(../images/tabs/tm-r.png) no-repeat; }
+.tabs>.head .normal_>.xbtn { background: url(../images/tabs/tm-bg.png) repeat-x; }
+.tabs>.head .selected { z-index: 3; }
+.tabs>.head .selected>.left { background: url(../images/tabs/tm-l-s.png) no-repeat; }
+.tabs>.head .selected>.main { background: url(../images/tabs/tm-bg-s.png) repeat-x; color: #CC6601; }
+.tabs>.head .selected>.right { background: url(../images/tabs/tm-r-s.png) no-repeat;}
+.tabs>.head .selected>.xbtn { background: url(../images/tabs/tm-bg-s.png) repeat-x; }
+
+.icon-close {background-position: -80px -128px;}
+.icon {
+    background-image: url("../images/tabs/icons.png");
+    float: left;
+    height: 16px;
+    overflow: hidden;
+    width: 16px;
+}
+.iframe_{width:100%;height:100%;border-style: none;}
